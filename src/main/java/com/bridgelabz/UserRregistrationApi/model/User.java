@@ -1,4 +1,6 @@
-package com.bridgelabz.UserRregistrationApi.entity;
+package com.bridgelabz.UserRregistrationApi.model;
+
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -29,8 +31,14 @@ public class User {
 	private String password;
 	
 	@Column
-	private int age;
+	private String phone;
+	
+	@Column
+	private String dob;
 	
 	@Column
 	private String occupation;
+	
+	@Column
+	private LocalDateTime registerDate = LocalDateTime.now();
 }

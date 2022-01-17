@@ -1,20 +1,23 @@
 package com.bridgelabz.UserRregistrationApi.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.UserRregistrationApi.customExceptions.InvalidUserException;
+import com.bridgelabz.UserRregistrationApi.dto.LoginDto;
 import com.bridgelabz.UserRregistrationApi.dto.UserDto;
-import com.bridgelabz.UserRregistrationApi.entity.User;
+import com.bridgelabz.UserRregistrationApi.model.Login;
+import com.bridgelabz.UserRregistrationApi.model.User;
 import com.bridgelabz.UserRregistrationApi.repository.UserRepo;
+import com.bridgelabz.UserRregistrationApi.util.JwtToken;
 
 @Service
-public class UserService implements IUserService {
+public class UserService implements IService {
 
 	@Autowired
 	private UserRepo userRepo;
@@ -22,9 +25,31 @@ public class UserService implements IUserService {
 	@Autowired
 	ModelMapper modelMapper;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private JwtToken jwtToken;
+
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
+	}
+
+	@Override
+	public String registerUser(UserDto userDto) {
+		// check whether the given email id is present in the database
+		User duplicateUser = userRepo.findByEmail(userDto.getEmail());
+		if (duplicateUser != null) {
+			return "Invalid User!...email already used";
+		} else {
+			userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+			// map the all entities with userDto
+			User user = modelMapper.map(userDto, User.class);
+			// save the user in database
+			userRepo.save(user);
+			return "User saved...!";
+		}
 	}
 
 	@Override
@@ -43,37 +68,39 @@ public class UserService implements IUserService {
 		updatedUser.setLastName(user.getLastName());
 		updatedUser.setEmail(user.getEmail());
 		updatedUser.setPassword(user.getPassword());
-		updatedUser.setAge(user.getAge());
+		updatedUser.setPhone(user.getPhone());
+		updatedUser.setDob(user.getDob());
 		updatedUser.setOccupation(user.getOccupation());
 		userRepo.save(updatedUser);
 		return "User Updated...";
 	}
 
 	@Override
-	public String saveUser(UserDto userDto) {
-		User user = modelMapper.map(userDto, User.class);
-		List<User> userList = userRepo.findAll();
-		for (User currentuser : userList) {
-			if (currentuser.getEmail().equals(user.getEmail())) {
-				return "Invalid User!...email already used";
+	public String deleteUser(int id) {
+		Optional<User> deleteUser = userRepo.findById(id);
+		try {
+			if (!deleteUser.isPresent()) {
+				throw new InvalidUserException("Invalid Endpoint Url...User not found...!!");
+			}else {
+				userRepo.delete(deleteUser.get());
+				return ("User deleted with id: " + id);
 			}
+		}catch (InvalidUserException e) {
+			return "Error: " + e.getMessage();
 		}
-		userRepo.save(user);
-		return "User saved...!";
 	}
 
 	@Override
-	public String deleteUser(int id) {
-		Optional<User> deleteUser = null;
-		String msg = null;
-		deleteUser = userRepo.findById(id);
-		if (deleteUser == null)
-			throw new InvalidUserException("Invalid Endpoint Url...User not found...!!");
-
-		if (deleteUser.isPresent()) {
-			userRepo.delete(deleteUser.get());
-			return ("User deleted with id: " + id);
+	public String validateUserLogin(LoginDto loginDto) {
+		Login login = modelMapper.map(loginDto, Login.class);
+		User validUser = userRepo.findByEmail(loginDto.getEmail());
+		if (validUser.getEmail().equals(login.getEmail()) && passwordEncoder.matches(loginDto.getPassword(), validUser.getPassword())) {
+			String token = jwtToken.createToken(loginDto.getEmail(), loginDto.getPassword());
+			return ("Login successful....Welcome "+ validUser.getFirstName() + "\n JWT : "+ token);
+		}else if (validUser != null) {
+			if(!validUser.getPassword().equals(login.getPassword())) return "Invalid Password";
 		}
-		return msg;
+		return "Invalid Email id";
 	}
+
 }
