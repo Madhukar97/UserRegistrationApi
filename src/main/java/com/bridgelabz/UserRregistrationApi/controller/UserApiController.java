@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -58,11 +59,17 @@ public class UserApiController {
 		return new ResponseEntity<String>(msg,HttpStatus.OK) ;
 	}
 	
-	@GetMapping("/user_login")
+	@PostMapping("/user_login")
 	public ResponseEntity<String> validateUserLogin(@RequestBody LoginDto loginDto){
 		String msg = iService.validateUserLogin(loginDto);
 		return new ResponseEntity<String>(msg,HttpStatus.OK);
 	}	
 	
+	
+	@PostMapping("/resetPassword")
+	public ResponseEntity<String> resetPassword (@RequestParam String password, @RequestParam String token) {
+		String msg = iService.resetPassword(password, token);
+		return new ResponseEntity<String>(msg,HttpStatus.OK);
+	}
 	
 }

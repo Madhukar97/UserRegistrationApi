@@ -12,6 +12,8 @@ public interface IService {
 	public String deleteUser(int id);
 
 	public String validateUserLogin(LoginDto loginDto);
+
+	public String resetPassword(String password, String token);
 	
 	
 }
