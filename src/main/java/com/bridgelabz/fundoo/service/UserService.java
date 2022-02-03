@@ -1,21 +1,20 @@
-package com.bridgelabz.UserRregistrationApi.service;
+package com.bridgelabz.fundoo.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.bridgelabz.UserRregistrationApi.customExceptions.InvalidUserException;
-import com.bridgelabz.UserRregistrationApi.dto.LoginDto;
-import com.bridgelabz.UserRregistrationApi.dto.UserDto;
-import com.bridgelabz.UserRregistrationApi.model.Login;
-import com.bridgelabz.UserRregistrationApi.model.User;
-import com.bridgelabz.UserRregistrationApi.repository.UserRepo;
-import com.bridgelabz.UserRregistrationApi.util.JwtToken;
+import com.bridgelabz.fundoo.customexceptions.InvalidUserException;
+import com.bridgelabz.fundoo.dto.LoginDto;
+import com.bridgelabz.fundoo.dto.UserDto;
+import com.bridgelabz.fundoo.model.Login;
+import com.bridgelabz.fundoo.model.User;
+import com.bridgelabz.fundoo.repository.UserRepo;
+import com.bridgelabz.fundoo.util.JwtToken;
 
 @Service
 public class UserService implements IService {
@@ -32,11 +31,6 @@ public class UserService implements IService {
 	@Autowired
 	private JwtToken jwtToken;
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
-
 	@Override
 	public String registerUser(UserDto userDto) {
 		// check whether the given email id is present in the database
@@ -49,9 +43,21 @@ public class UserService implements IService {
 			User user = modelMapper.map(userDto, User.class);
 			// save the user in database
 			userRepo.save(user);
-			return "User saved...!";
+			String token = jwtToken.createToken(user.getEmail(), user.getId());
+			return token;
 		}
 	}
+
+	
+	@Override
+	public String verifyuser(String token) {
+		String email = jwtToken.decodeToken(token);
+		User validUser = userRepo.findByEmail(email);
+		validUser.setIsVerified(true);
+		userRepo.save(validUser);
+		return "Email Verification Successful...Now you can login to your account.";
+	}
+
 
 	@Override
 	public String updateUser(UserDto userDto, int id) {
@@ -95,7 +101,7 @@ public class UserService implements IService {
 	public String validateUserLogin(LoginDto loginDto) {
 		Login login = modelMapper.map(loginDto, Login.class);
 		User validUser = userRepo.findByEmail(loginDto.getEmail());
-		if (validUser.getEmail().equals(login.getEmail()) && passwordEncoder.matches(loginDto.getPassword(), validUser.getPassword())) {
+		if (validUser.getEmail().equals(login.getEmail()) && passwordEncoder.matches(loginDto.getPassword(), validUser.getPassword()) && validUser.getIsVerified()) {
 			String token = jwtToken.createToken(loginDto.getEmail(), validUser.getId());
 			return ("Login successful....Welcome "+ validUser.getFirstName() + "\n JWT : "+ token);
 		}else if (validUser != null) {
@@ -116,6 +122,13 @@ public class UserService implements IService {
 		}
 		else return "Invalid credentials....User not found!";
 	}
+
+	@Override
+	public String forgotPassword(String email) {
+		
+		return null;
+	}
+
 
 }
 

@@ -1,7 +1,7 @@
-package com.bridgelabz.UserRregistrationApi.service;
+package com.bridgelabz.fundoo.service;
 
-import com.bridgelabz.UserRregistrationApi.dto.LoginDto;
-import com.bridgelabz.UserRregistrationApi.dto.UserDto;
+import com.bridgelabz.fundoo.dto.LoginDto;
+import com.bridgelabz.fundoo.dto.UserDto;
 
 public interface IService {
 
@@ -14,6 +14,10 @@ public interface IService {
 	public String validateUserLogin(LoginDto loginDto);
 
 	public String resetPassword(String password, String token);
+	
+	public String verifyuser(String token);
+
+	public String forgotPassword(String email);
 	
 	
 }

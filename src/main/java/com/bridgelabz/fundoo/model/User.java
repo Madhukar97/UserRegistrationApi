@@ -1,4 +1,4 @@
-package com.bridgelabz.UserRregistrationApi.model;
+package com.bridgelabz.fundoo.model;
 
 import java.time.LocalDateTime;
 
@@ -38,6 +38,9 @@ public class User {
 	
 	@Column
 	private String occupation;
+	
+	@Column
+	private Boolean isVerified = false;
 	
 	@Column
 	private LocalDateTime registerDate = LocalDateTime.now();

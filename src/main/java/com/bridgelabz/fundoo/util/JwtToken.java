@@ -1,4 +1,4 @@
-package com.bridgelabz.UserRregistrationApi.util;
+package com.bridgelabz.fundoo.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,6 @@ public class JwtToken {
 		id=claim.asInt(); 
 		Claim claim2 = claims.get("username");
 		username = claim2.asString();
-		System.out.println(username);
 		return username;
 	}
 
