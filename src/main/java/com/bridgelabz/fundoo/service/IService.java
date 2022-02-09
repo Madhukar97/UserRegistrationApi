@@ -2,6 +2,8 @@ package com.bridgelabz.fundoo.service;
 
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.UserDto;
+import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.util.Response;
 
 public interface IService {
 
@@ -19,5 +21,7 @@ public interface IService {
 
 	public String forgotPassword(String email);
 	
-	
+	public Response saveNote(Note note, String token);
+
+	public String deleteNote(Note note, int id);
 }

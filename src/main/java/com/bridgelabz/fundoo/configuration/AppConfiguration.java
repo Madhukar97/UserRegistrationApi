@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bridgelabz.fundoo.service.EmailService;
 import com.bridgelabz.fundoo.util.JwtToken;
+import com.bridgelabz.fundoo.util.Response;
 
 @Configuration
 public class AppConfiguration {
@@ -33,5 +34,10 @@ public class AppConfiguration {
 	@Bean
 	public EmailService emailService() {
 		return new EmailService();
+	}
+	
+	@Bean
+	public Response response() {
+		return new Response();
 	}
 }

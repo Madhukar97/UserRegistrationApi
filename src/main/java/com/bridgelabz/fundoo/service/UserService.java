@@ -12,15 +12,21 @@ import com.bridgelabz.fundoo.customexceptions.InvalidUserException;
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.UserDto;
 import com.bridgelabz.fundoo.model.Login;
+import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.User;
+import com.bridgelabz.fundoo.repository.NoteRepo;
 import com.bridgelabz.fundoo.repository.UserRepo;
 import com.bridgelabz.fundoo.util.JwtToken;
+import com.bridgelabz.fundoo.util.Response;
 
 @Service
 public class UserService implements IService {
 
 	@Autowired
 	private UserRepo userRepo;
+	
+	@Autowired
+	private NoteRepo noteRepo;
 
 	@Autowired
 	ModelMapper modelMapper;
@@ -30,6 +36,9 @@ public class UserService implements IService {
 	
 	@Autowired
 	private JwtToken jwtToken;
+	
+	@Autowired
+	private Response response;
 
 	@Override
 	public String registerUser(UserDto userDto) {
@@ -51,7 +60,7 @@ public class UserService implements IService {
 	
 	@Override
 	public String verifyuser(String token) {
-		String email = jwtToken.decodeToken(token);
+		String email = jwtToken.decodeTokenUsername(token);
 		User validUser = userRepo.findByEmail(email);
 		validUser.setIsVerified(true);
 		userRepo.save(validUser);
@@ -75,9 +84,6 @@ public class UserService implements IService {
 		updatedUser.setLastName(user.getLastName());
 		updatedUser.setEmail(user.getEmail());
 		updatedUser.setPassword(user.getPassword());
-		updatedUser.setPhone(user.getPhone());
-		updatedUser.setDob(user.getDob());
-		updatedUser.setOccupation(user.getOccupation());
 		userRepo.save(updatedUser);
 		return "User Updated...";
 	}
@@ -103,7 +109,7 @@ public class UserService implements IService {
 		User validUser = userRepo.findByEmail(loginDto.getEmail());
 		if (validUser.getEmail().equals(login.getEmail()) && passwordEncoder.matches(loginDto.getPassword(), validUser.getPassword()) && validUser.getIsVerified()) {
 			String token = jwtToken.createToken(loginDto.getEmail(), validUser.getId());
-			return ("Login successful....Welcome "+ validUser.getFirstName() + "\n JWT : "+ token);
+			return (token);
 		}else if (validUser != null) {
 			if(!validUser.getPassword().equals(login.getPassword())) return "Invalid Password";
 		}
@@ -112,7 +118,7 @@ public class UserService implements IService {
 
 	@Override
 	public String resetPassword(String password, String token) {
-		String email = jwtToken.decodeToken(token);
+		String email = jwtToken.decodeTokenUsername(token);
 		User validUser = userRepo.findByEmail(email);
 		if (validUser != null) {
 			validUser.setPassword(passwordEncoder.encode(password));
@@ -127,6 +133,27 @@ public class UserService implements IService {
 	public String forgotPassword(String email) {
 		
 		return null;
+	}
+
+
+	@Override
+	public Response saveNote(Note note, String token) {
+		int id = jwtToken.decodeTokenUserId(token);
+		User user = userRepo.getById(id);
+		note.bindUserToNotes(user);
+		noteRepo.save(note);
+		response.setStatusCode(200);
+		response.setStatusMessage("Note is saved successfully..!");
+		response.setToken(token);
+		return response;
+	}
+
+
+	@Override
+	public String deleteNote(Note note, int id) {
+		Note validNote = noteRepo.findById(id).get();
+		noteRepo.delete(validNote);
+		return "Note is deleted...!";
 	}
 
 

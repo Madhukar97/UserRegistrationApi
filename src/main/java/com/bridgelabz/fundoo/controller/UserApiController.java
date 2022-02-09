@@ -7,6 +7,7 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,12 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.UserDto;
+import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.UserRepo;
 import com.bridgelabz.fundoo.service.EmailService;
 import com.bridgelabz.fundoo.service.IService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 public class UserApiController {
 	
 	@Autowired
@@ -47,7 +50,7 @@ public class UserApiController {
 		return new ResponseEntity<List<User>>(userRepo.findAll(),HttpStatus.OK);
 	}
 	
-	@PostMapping("/register_user")
+	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) throws UnsupportedEncodingException, MessagingException {
 		String msg = iService.registerUser(userDto);
 		String siteUrl = "http://localhost:8080/";
@@ -92,5 +95,6 @@ public class UserApiController {
 		String msg = emailService.sendForgotPassEmail(email, siteUrl);
 		return new ResponseEntity<String>(msg,HttpStatus.OK);
 	}
+	
 	
 }
