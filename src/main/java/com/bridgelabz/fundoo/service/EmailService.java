@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -37,7 +38,7 @@ public class EmailService {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 	
-		helper.setFrom("madhukar689@gmail.com", senderName);
+		helper.setFrom(System.getenv("fundooemail"), senderName);
 		helper.setTo(userDto.getEmail());
 		helper.setSubject(subject);
 		helper.setText(mailContent, true);
