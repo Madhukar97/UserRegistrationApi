@@ -42,14 +42,17 @@ public class UserService implements IService {
 
 	@Override
 	public String registerUser(UserDto userDto) {
+		System.out.println(userDto.toString());
 		// check whether the given email id is present in the database
 		User duplicateUser = userRepo.findByEmail(userDto.getEmail());
+		
 		if (duplicateUser != null) {
 			return "Invalid User!...email already used";
 		} else {
 			userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 			// map the all entities with userDto
 			User user = modelMapper.map(userDto, User.class);
+			System.out.println(user.toString());
 			// save the user in database
 			userRepo.save(user);
 			String token = jwtToken.createToken(user.getEmail(), user.getId());
