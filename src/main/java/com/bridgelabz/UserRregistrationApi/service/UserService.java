@@ -1,5 +1,6 @@
 package com.bridgelabz.UserRregistrationApi.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -95,7 +96,7 @@ public class UserService implements IService {
 		Login login = modelMapper.map(loginDto, Login.class);
 		User validUser = userRepo.findByEmail(loginDto.getEmail());
 		if (validUser.getEmail().equals(login.getEmail()) && passwordEncoder.matches(loginDto.getPassword(), validUser.getPassword())) {
-			String token = jwtToken.createToken(loginDto.getEmail(), loginDto.getPassword());
+			String token = jwtToken.createToken(loginDto.getEmail(), validUser.getId());
 			return ("Login successful....Welcome "+ validUser.getFirstName() + "\n JWT : "+ token);
 		}else if (validUser != null) {
 			if(!validUser.getPassword().equals(login.getPassword())) return "Invalid Password";
@@ -103,4 +104,22 @@ public class UserService implements IService {
 		return "Invalid Email id";
 	}
 
+	@Override
+	public String resetPassword(String password, String token) {
+		String email = jwtToken.decodeToken(token);
+		User validUser = userRepo.findByEmail(email);
+		if (validUser != null) {
+			validUser.setPassword(passwordEncoder.encode(password));
+			validUser.setRegisterDate(LocalDateTime.now());
+			userRepo.save(validUser);
+			return "Password reset successful....!";
+		}
+		else return "Invalid credentials....User not found!";
+	}
+
 }
+
+
+
+
+
