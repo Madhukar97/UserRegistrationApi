@@ -1,4 +1,4 @@
-package com.bridgelabz.UserRregistrationApi.customExceptions;
+package com.bridgelabz.fundoo.customexceptions;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 

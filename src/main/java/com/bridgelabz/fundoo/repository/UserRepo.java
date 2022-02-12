@@ -1,9 +1,9 @@
-package com.bridgelabz.UserRregistrationApi.repository;
+package com.bridgelabz.fundoo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bridgelabz.UserRregistrationApi.model.User;
+import com.bridgelabz.fundoo.model.User;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer>{

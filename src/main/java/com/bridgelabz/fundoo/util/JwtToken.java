@@ -1,4 +1,4 @@
-package com.bridgelabz.UserRregistrationApi.util;
+package com.bridgelabz.fundoo.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class JwtToken {
 		return token;
 	}
 	
-	public String decodeToken(String token) {
+	public String decodeTokenUsername(String token) {
 		int id;
 		String username;
 	           //for verification algorithm
@@ -47,8 +47,29 @@ public class JwtToken {
 		id=claim.asInt(); 
 		Claim claim2 = claims.get("username");
 		username = claim2.asString();
-		System.out.println(username);
 		return username;
+	}
+	
+	public int decodeTokenUserId(String token) {
+		int id;
+		String username;
+	           //for verification algorithm
+	           Verification verification = null;
+		try {
+		verification = JWT.require(Algorithm.HMAC256(SECRET_KEY));
+		} catch (IllegalArgumentException  e) {
+			e.printStackTrace();
+		}
+		JWTVerifier jwtverifier=verification.build();
+		//to decode token
+		DecodedJWT decodedjwt=jwtverifier.verify(token);
+	
+		Map<String, Claim> claims = decodedjwt.getClaims();
+		Claim claim = claims.get("id");
+		id=claim.asInt(); 
+		Claim claim2 = claims.get("username");
+		username = claim2.asString();
+		return id;
 	}
 
 }

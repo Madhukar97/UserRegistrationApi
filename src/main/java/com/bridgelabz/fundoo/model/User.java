@@ -1,6 +1,7 @@
-package com.bridgelabz.UserRregistrationApi.model;
+package com.bridgelabz.fundoo.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -31,14 +32,11 @@ public class User {
 	private String password;
 	
 	@Column
-	private String phone;
-	
-	@Column
-	private String dob;
-	
-	@Column
-	private String occupation;
+	private Boolean isVerified = false;
 	
 	@Column
 	private LocalDateTime registerDate = LocalDateTime.now();
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Note> notes;
 }

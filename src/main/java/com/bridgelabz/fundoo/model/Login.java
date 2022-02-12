@@ -1,4 +1,4 @@
-package com.bridgelabz.UserRregistrationApi.model;
+package com.bridgelabz.fundoo.model;
 
 import lombok.Getter;
 import lombok.Setter;

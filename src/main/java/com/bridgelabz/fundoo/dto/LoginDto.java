@@ -1,4 +1,4 @@
-package com.bridgelabz.UserRregistrationApi.dto;
+package com.bridgelabz.fundoo.dto;
 
 import lombok.Getter;
 import lombok.Setter;

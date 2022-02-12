@@ -1,18 +1,17 @@
-package com.bridgelabz.UserRregistrationApi.dto;
+package com.bridgelabz.fundoo.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class UserDto {
 	
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
-	private String dob;
-	private String phone;
-	private String occupation;
 
 }
