@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,7 +33,9 @@ public class Note {
 	private String color;
 	
 	@ManyToOne
+	@JsonIgnore
 	private User user;
+	
 	
 	public void bindUserToNotes(User user) {
 		this.user=user;

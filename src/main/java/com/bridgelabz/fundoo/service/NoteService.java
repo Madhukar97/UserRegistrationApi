@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoo.service;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,12 +44,21 @@ public class NoteService {
 		return response;
 	}
 
-	public Response deleteNote(Note note, int id) {
+	public Response deleteNote(int id) {
 		Note validNote = noteRepo.findById(id).get();
 		noteRepo.delete(validNote);
 		response.setStatusCode(200);
 		response.setStatusMessage("Note is deleted successfully..!");
-		response.setToken(note);
+		response.setToken(validNote);
 		return response;
 	}
+
+	public List<Note> getAllNote(String token) {
+		int id = jwtToken.decodeTokenUserId(token);
+		User user = userRepo.findById(id).get();
+		List<Note> notes = user.getNotes();
+		return notes;
+	}
+	
+	
 }

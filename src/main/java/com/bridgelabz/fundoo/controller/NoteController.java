@@ -1,10 +1,13 @@
 package com.bridgelabz.fundoo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,11 +35,17 @@ public class NoteController {
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/users/deleteNote/{id}")
-	public ResponseEntity<Response> deleteNote(@PathVariable int id, @RequestBody Note note){
-		Response response = noteService.deleteNote(note , id);
+	@DeleteMapping("/users/{id}")
+	public ResponseEntity<Response> deleteNote(@PathVariable int id){
+		Response response = noteService.deleteNote(id);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 	}
+	
+	@GetMapping("/users/")
+	public ResponseEntity<List<Note>> getAllNote(@RequestHeader String token){
+		List<Note> notes = noteService.getAllNote(token);
+		return new ResponseEntity<List<Note>>(notes, HttpStatus.OK);
+	} 
 	
 	
 }
