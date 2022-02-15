@@ -59,6 +59,18 @@ public class NoteService {
 		List<Note> notes = user.getNotes();
 		return notes;
 	}
+
+	public Response updateNote(Note note, String token) {
+		int id = jwtToken.decodeTokenUserId(token);
+		User user = userRepo.getById(id);
+		note.bindUserToNotes(user);
+		noteRepo.save(note);
+		response.setStatusCode(200);
+		response.setStatusMessage("Note is updated successfully..!");
+		response.setToken(note);
+		return response;
+	}
+	
 	
 	
 }

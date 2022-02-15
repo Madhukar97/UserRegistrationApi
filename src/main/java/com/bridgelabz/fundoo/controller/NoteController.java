@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,7 +30,7 @@ public class NoteController {
 	@Autowired
 	private NoteService noteService;
 	
-	@PutMapping("/users/saveNote/")
+	@PostMapping("/users/saveNote/")
 	public ResponseEntity<Response> saveNote( @RequestHeader String token, @RequestBody Note note){
 		Response response = noteService.saveNote(note , token);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
@@ -47,5 +48,10 @@ public class NoteController {
 		return new ResponseEntity<List<Note>>(notes, HttpStatus.OK);
 	} 
 	
+	@PutMapping("users/")
+	public ResponseEntity<Response> updateNote( @RequestHeader String token, @RequestBody Note note){
+		Response response = noteService.updateNote(note , token);
+		return new ResponseEntity<Response>(response, HttpStatus.OK);
+	}
 	
 }
