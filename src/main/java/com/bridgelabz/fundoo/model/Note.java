@@ -32,6 +32,12 @@ public class Note {
 	@Column
 	private String color;
 	
+	@Column
+	private boolean isArchived;
+	
+	@Column
+	private boolean inTrash;
+	
 	@ManyToOne
 	@JsonIgnore
 	private User user;
