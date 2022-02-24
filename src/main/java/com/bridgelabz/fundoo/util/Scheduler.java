@@ -15,12 +15,9 @@ public class Scheduler {
 	@Scheduled(cron = "20 * * * * ?")
 	public void cronJobSch() throws Exception {
 		List<Note> notesList = noteRepo.findAll();
-		for(Note n : notesList) {
-			if(n.isInTrash()) {
-				System.out.println("Note deleted with id: " + n.getId());
-				noteRepo.delete(n);
-			}
-		}
+		notesList.stream().filter(p -> p.isInTrash()).forEach(note -> {
+			System.out.println("Note deleted with id: " + note.getId());
+			noteRepo.delete(note);});
 	}
 
 }
