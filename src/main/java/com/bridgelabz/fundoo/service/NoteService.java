@@ -72,15 +72,4 @@ public class NoteService {
 		return response;
 	}
 	
-	@Scheduled(cron = "15 * * * * ?")
-	public void cronJobSch() throws Exception {
-		List<Note> notesList = noteRepo.findAll();
-		for(Note n : notesList) {
-			if(n.isInTrash()) {
-				System.out.println("Note deleted with id: " + n.getId());
-				noteRepo.delete(n);
-			}
-		}
-	}
-	
 }

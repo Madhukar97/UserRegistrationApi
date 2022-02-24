@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.bridgelabz.fundoo.service.EmailService;
 import com.bridgelabz.fundoo.util.JwtToken;
 import com.bridgelabz.fundoo.util.Response;
+import com.bridgelabz.fundoo.util.Scheduler;
 
 @Configuration
 public class AppConfiguration {
@@ -39,5 +40,10 @@ public class AppConfiguration {
 	@Bean
 	public Response response() {
 		return new Response();
+	}
+	
+	@Bean
+	public Scheduler scheduler() {
+		return new Scheduler();
 	}
 }
