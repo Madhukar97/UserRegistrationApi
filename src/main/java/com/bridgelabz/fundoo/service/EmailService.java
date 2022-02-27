@@ -72,7 +72,7 @@ public class EmailService {
 		String email = userRepo.findById(note.getUser().getId()).get().getEmail();
 		String subject = "Fundoo Note Remainder";
 		String senderName = "Fundoo Team";
-		String mailContent = "<p>This is a remainder for the note: "+ note.getTitle() + "<br>" + note.getContent() +"</p>";
+		String mailContent = "<p>This is a remainder for the note: <br><h2>"+ note.getTitle() + "</h2><br>" + note.getContent() +"</p>";
 		
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
