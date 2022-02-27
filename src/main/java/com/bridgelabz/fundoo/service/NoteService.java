@@ -1,6 +1,10 @@
 package com.bridgelabz.fundoo.service;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
+
+import javax.mail.MessagingException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,9 @@ public class NoteService {
 	
 	@Autowired
 	private Response response;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	
 	public Response saveNote(Note note, String token) {
@@ -70,6 +77,31 @@ public class NoteService {
 		response.setStatusMessage("Note is updated successfully..!");
 		response.setToken(note);
 		return response;
+	}
+	
+	public void emptyTrash() {
+		List<Note> notesList = noteRepo.findAll();
+		notesList.stream().filter(p -> p.isInTrash()).forEach(note -> {
+			System.out.println("Note deleted with id: " + note.getId());
+			noteRepo.delete(note);});
+	}
+	
+	public void sendNoteReminderMail() {
+		List<Note> notesList = noteRepo.findAll();
+		Date currentDate = new Date();
+		notesList.stream().forEach(note -> {
+			if( note.getReminder() != null && currentDate.getTime() >= note.getReminder().getTime()) {
+				System.out.println("Note reminder mail sent to user email");
+				try {
+					emailService.sendNoteRemainder(note);
+					note.setReminder(null);
+					noteRepo.save(note);
+				} catch (UnsupportedEncodingException | MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 }

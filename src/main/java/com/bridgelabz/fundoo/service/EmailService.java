@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import com.bridgelabz.fundoo.dto.UserDto;
+import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.UserRepo;
 import com.bridgelabz.fundoo.util.JwtToken;
@@ -66,4 +67,23 @@ public class EmailService {
 		mailSender.send(message);
 		return "Check your mail to reset your password";
 	}
+	
+	public void sendNoteRemainder(Note note) throws UnsupportedEncodingException, MessagingException {
+		String email = userRepo.findById(note.getUser().getId()).get().getEmail();
+		String subject = "Fundoo Note Remainder";
+		String senderName = "Fundoo Team";
+		String mailContent = "<p>This is a remainder for the note: "+ note.getTitle() + "<br>" + note.getContent() +"</p>";
+		
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+		
+		helper.setFrom("${spring.mail.username}", senderName);
+		helper.setTo(email);
+		helper.setSubject(subject);
+		helper.setText(mailContent, true);
+		
+		mailSender.send(message);
+	}
+	
+	
 }

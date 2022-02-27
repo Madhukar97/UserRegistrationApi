@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoo.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,10 +40,12 @@ public class Note {
 	@Column
 	private boolean inTrash;
 	
+	@Column
+	private Date reminder;
+	
 	@ManyToOne
 	@JsonIgnore
 	private User user;
-	
 	
 	public void bindUserToNotes(User user) {
 		this.user=user;
