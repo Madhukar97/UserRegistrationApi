@@ -8,5 +8,5 @@ import com.bridgelabz.fundoo.model.Note;
 @Repository
 public interface NoteRepo extends JpaRepository<Note, Integer> {
 
-	
+
 }

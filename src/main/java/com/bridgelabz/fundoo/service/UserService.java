@@ -12,9 +12,7 @@ import com.bridgelabz.fundoo.customexceptions.InvalidUserException;
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.UserDto;
 import com.bridgelabz.fundoo.model.Login;
-import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.User;
-import com.bridgelabz.fundoo.repository.NoteRepo;
 import com.bridgelabz.fundoo.repository.UserRepo;
 import com.bridgelabz.fundoo.util.JwtToken;
 import com.bridgelabz.fundoo.util.Response;
@@ -24,19 +22,16 @@ public class UserService implements IService {
 
 	@Autowired
 	private UserRepo userRepo;
-	
-	@Autowired
-	private NoteRepo noteRepo;
 
 	@Autowired
 	ModelMapper modelMapper;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private JwtToken jwtToken;
-	
+
 	@Autowired
 	private Response response;
 
@@ -45,7 +40,7 @@ public class UserService implements IService {
 		System.out.println(userDto.toString());
 		// check whether the given email id is present in the database
 		User duplicateUser = userRepo.findByEmail(userDto.getEmail());
-		
+
 		if (duplicateUser != null) {
 			return "Invalid User!...email already used";
 		} else {
@@ -60,7 +55,7 @@ public class UserService implements IService {
 		}
 	}
 
-	
+
 	@Override
 	public String verifyuser(String token) {
 		String email = jwtToken.decodeTokenUsername(token);
@@ -134,30 +129,10 @@ public class UserService implements IService {
 
 	@Override
 	public String forgotPassword(String email) {
-		
+
 		return null;
 	}
 
-
-	@Override
-	public Response saveNote(Note note, String token) {
-		int id = jwtToken.decodeTokenUserId(token);
-		User user = userRepo.getById(id);
-		note.bindUserToNotes(user);
-		noteRepo.save(note);
-		response.setStatusCode(200);
-		response.setStatusMessage("Note is saved successfully..!");
-		response.setToken(token);
-		return response;
-	}
-
-
-	@Override
-	public String deleteNote(Note note, int id) {
-		Note validNote = noteRepo.findById(id).get();
-		noteRepo.delete(validNote);
-		return "Note is deleted...!";
-	}
 
 
 }

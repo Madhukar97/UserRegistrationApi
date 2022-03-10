@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NoteDto {
-	
+
 	private int id;
 	private String title;
 	private String content;

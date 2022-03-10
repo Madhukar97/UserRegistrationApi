@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoo.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,32 +27,39 @@ public class NoteController {
 
 	@Autowired
 	private IService iService;
-	
+
 	@Autowired
 	private NoteService noteService;
-	
+
 	@PostMapping("/users/saveNote/")
 	public ResponseEntity<Response> saveNote( @RequestHeader String token, @RequestBody Note note){
 		Response response = noteService.saveNote(note , token);
-		return new ResponseEntity<Response>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/users/{id}")
 	public ResponseEntity<Response> deleteNote(@PathVariable int id){
 		Response response = noteService.deleteNote(id);
-		return new ResponseEntity<Response>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/users/")
 	public ResponseEntity<List<Note>> getAllNote(@RequestHeader String token){
 		List<Note> notes = noteService.getAllNote(token);
-		return new ResponseEntity<List<Note>>(notes, HttpStatus.OK);
-	} 
-	
+		return new ResponseEntity<>(notes, HttpStatus.OK);
+	}
+
 	@PutMapping("users/")
 	public ResponseEntity<Response> updateNote( @RequestHeader String token, @RequestBody Note note){
 		Response response = noteService.updateNote(note , token);
-		return new ResponseEntity<Response>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("/note/search/{query}")
+	public ResponseEntity<List<Note>> searchNotes(@RequestHeader String token, @PathVariable String query) throws IllegalArgumentException, UnsupportedEncodingException{
+		List<Note> notes = noteService.searchNote(query, token);
+		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
 	
+
 }

@@ -13,35 +13,35 @@ import com.bridgelabz.fundoo.util.Scheduler;
 
 @Configuration
 public class AppConfiguration {
-	
+
 	//Password Encoder configuration bean
 	@Bean
 	public PasswordEncoder passwordencoder() {
 		return new BCryptPasswordEncoder();
-		
+
 	}
-	
+
 	//JwtToken configuration bean
 	@Bean
 	public JwtToken jwtToken() {
 		return new JwtToken();
 	}
-	
+
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-	
+
 	@Bean
 	public EmailService emailService() {
 		return new EmailService();
 	}
-	
+
 	@Bean
 	public Response response() {
 		return new Response();
 	}
-	
+
 	@Bean
 	public Scheduler scheduler() {
 		return new Scheduler();

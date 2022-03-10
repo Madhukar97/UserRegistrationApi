@@ -20,33 +20,33 @@ import lombok.ToString;
 @ToString
 @Entity
 public class Note {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column
 	private String title;
-	
+
 	@Column
 	private String content;
-	
+
 	@Column
 	private String color;
-	
+
 	@Column
 	private boolean isArchived;
-	
+
 	@Column
 	private boolean inTrash;
-	
+
 	@Column
 	private Date reminder;
-	
+
 	@ManyToOne
 	@JsonIgnore
 	private User user;
-	
+
 	public void bindUserToNotes(User user) {
 		this.user=user;
 	}

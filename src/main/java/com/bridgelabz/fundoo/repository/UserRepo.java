@@ -9,5 +9,5 @@ import com.bridgelabz.fundoo.model.User;
 public interface UserRepo extends JpaRepository<User, Integer>{
 
 	public User findByEmail(String email);
-	
+
 }

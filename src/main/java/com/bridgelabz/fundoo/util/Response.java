@@ -8,9 +8,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Response {
-	
+
 	private Integer statusCode;
 	private String statusMessage;
-	private Object token;	
+	private Object token;
 
 }
