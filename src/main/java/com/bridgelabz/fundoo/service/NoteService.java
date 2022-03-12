@@ -49,7 +49,7 @@ public class NoteService {
 		Note savedEntity =  noteRepo.save(note);
 
 		//System.out.println(savedEntity);
-		savedEntity.setUser(null);
+		//savedEntity.setUser(null);
 		elasticSearchService.createNote(savedEntity);
 		response.setStatusCode(200);
 		response.setStatusMessage("Note is saved successfully..!");

@@ -25,6 +25,7 @@ import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.UserRepo;
 import com.bridgelabz.fundoo.service.EmailService;
 import com.bridgelabz.fundoo.service.IService;
+import com.bridgelabz.fundoo.service.UserService;
 
 @RestController
 @CrossOrigin(origins="http://localhost:3000")
@@ -76,8 +77,8 @@ public class UserApiController {
 		return new ResponseEntity<>(msg,HttpStatus.OK);
 	}
 
-	@PutMapping("/resetpassword")
-	public ResponseEntity<String> resetPassword (@RequestParam String password, @RequestHeader String token) {
+	@PutMapping("/resetpassword/{password}")
+	public ResponseEntity<String> resetPassword (@PathVariable String password, @RequestHeader String token) {
 		String msg = iService.resetPassword(password, token);
 		return new ResponseEntity<>(msg,HttpStatus.OK);
 	}
@@ -89,10 +90,11 @@ public class UserApiController {
 	}
 
 
-	@PostMapping("/forgotPass")
-	public ResponseEntity<String> updateUser(@PathVariable String email) throws UnsupportedEncodingException, MessagingException {
-		String siteUrl = "http://localhost:8080/";
-		String msg = emailService.sendForgotPassEmail(email, siteUrl);
+	@PostMapping("/forgotPass/{email}")
+	public ResponseEntity<String> forgotPass(@PathVariable String email) throws UnsupportedEncodingException, MessagingException {
+		String siteUrl = "http://localhost:3000/resetpass";
+		emailService.sendForgotPassEmail(email, siteUrl);
+		String msg = iService.forgotPassword(email);
 		return new ResponseEntity<>(msg,HttpStatus.OK);
 	}
 

@@ -105,10 +105,8 @@ public class ElasticSearchService {
 	}
 
 	public List<Note> searchNotes(String query, String token) throws IllegalArgumentException, UnsupportedEncodingException{
-		System.out.println("fddfxdg");
 		long userId = jwtToken.decodeTokenUserId(token);
 		SearchRequest searchRequest = new SearchRequest(INDEX).types(TYPE);
-		System.out.println("search method 1");
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 //		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.queryStringQuery("*" + query + "*")
 //				.analyzeWildcard(true).field("title").field("content"))
@@ -119,7 +117,6 @@ public class ElasticSearchService {
 		searchSourceBuilder.query(queryBuilder);
 		searchRequest.source(searchSourceBuilder);
 		SearchResponse searchResponse = null;
-		System.out.println("search method");
 		try {
 			searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 		} catch (IOException e) {
@@ -129,11 +126,5 @@ public class ElasticSearchService {
 		return notes;
 	}
 	
-	public List<Note> searchNotes(String query){
-	QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-			.must(QueryBuilders.queryStringQuery("*" + query + "*").analyzeWildcard(true).field("title", 2.0f)
-					.field("description").field("labels"));
-	return null;
-	}
 
 }

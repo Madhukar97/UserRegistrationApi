@@ -118,6 +118,7 @@ public class UserService implements IService {
 	public String resetPassword(String password, String token) {
 		String email = jwtToken.decodeTokenUsername(token);
 		User validUser = userRepo.findByEmail(email);
+		System.out.println(email);
 		if (validUser != null) {
 			validUser.setPassword(passwordEncoder.encode(password));
 			validUser.setRegisterDate(LocalDateTime.now());
@@ -129,8 +130,9 @@ public class UserService implements IService {
 
 	@Override
 	public String forgotPassword(String email) {
-
-		return null;
+		int id = userRepo.findByEmail(email).getId();
+		String token = jwtToken.createToken(email, id);
+		return token;
 	}
 
 
