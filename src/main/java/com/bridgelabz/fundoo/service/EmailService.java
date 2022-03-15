@@ -49,7 +49,7 @@ public class EmailService {
 	public String sendForgotPassEmail(String email, String siteUrl) throws UnsupportedEncodingException, MessagingException{
 		User validUser = userRepo.findByEmail(email);
 		String token = jwtToken.createToken(validUser.getEmail(), validUser.getId());
-		String verifyUrl = siteUrl; //+ "resetpassword?token=" + token;
+		String verifyUrl = siteUrl + "/" + token;
 		String subject = "Please click on the link to reset your password";
 		String senderName = "Fundoo Team";
 		String mailContent = "<p>Please click link below to reset your password</p>";
