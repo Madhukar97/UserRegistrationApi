@@ -115,5 +115,9 @@ public class NoteService {
 			}
 		});
 	}
+	
+	public List<Note> fetchAllNoteTitles() {
+		return elasticSearchService.getAllTitles();
+	}
 
 }

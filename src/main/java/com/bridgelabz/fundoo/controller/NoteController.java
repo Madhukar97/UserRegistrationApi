@@ -61,5 +61,10 @@ public class NoteController {
 		return new ResponseEntity<>(notes, HttpStatus.OK);
 	}
 	
+	@GetMapping("/note/search")
+	public ResponseEntity<List<Note>> getAllNoteTitles(){
+		List<Note> noteTitles = noteService.fetchAllNoteTitles();
+		return new ResponseEntity<List<Note>>(noteTitles, HttpStatus.OK);
+	}
 
 }

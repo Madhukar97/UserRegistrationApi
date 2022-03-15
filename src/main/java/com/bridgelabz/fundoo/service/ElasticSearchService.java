@@ -126,5 +126,20 @@ public class ElasticSearchService {
 		return notes;
 	}
 	
+	public List<Note> getAllTitles(){
+		SearchRequest searchRequest = new SearchRequest();
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+		
+		searchRequest.source(searchSourceBuilder.fetchField("title"));
+		SearchResponse searchResponse = null;
+		try {
+			searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return getSearchResult(searchResponse);
+	}
+
 
 }
